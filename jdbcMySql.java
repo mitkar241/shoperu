@@ -1,11 +1,34 @@
 import java.sql.*;
+import java.util.Calendar;
 
-class MysqlCon{
+class MysqlConn{
 
   public static void main(String args[]){
     Connection conn=null;
-    Statement stmt=null;
-    ResultSet rs=null;
+
+    try {
+      MysqlConn mysqlConn = new MysqlConn();
+      conn = mysqlConn.getConn();
+      
+      mysqlConn.getCreds(mysqlConn, conn);
+      
+      mysqlConn.addCred(mysqlConn, conn);
+      mysqlConn.getCreds(mysqlConn, conn);
+
+      mysqlConn.delCred(mysqlConn, conn);
+      mysqlConn.getCreds(mysqlConn, conn);
+
+      mysqlConn.emptyCred(mysqlConn, conn);
+      mysqlConn.getCreds(mysqlConn, conn);
+
+      mysqlConn.closeConn(conn);
+    } catch(Exception err){
+      System.out.println(err);
+    }
+  }
+
+  public Connection getConn(){
+    Connection conn=null;
 
     try {
       /*
@@ -24,12 +47,103 @@ class MysqlCon{
       Class.forName(driver);
 
       conn = DriverManager.getConnection(url, uname, pwd);
-      stmt=conn.createStatement();
+    } catch(Exception err){
+      System.out.println(err);
+    }
+
+    return conn;
+  }
+
+  public void closeConn(Connection conn){
+    try {
+      conn.close();
+    } catch(Exception err){
+      System.out.println(err);
+    }
+  }
+
+  public Statement getStmt(Connection conn){
+    Statement stmt = null;
+    try {
+      stmt = conn.createStatement();
+    } catch(Exception err){
+      System.out.println(err);
+    }
+    return stmt;
+  }
+
+  public void getCreds(MysqlConn mysqlConn, Connection conn){
+    Statement stmt = null;
+    ResultSet rs=null;
+
+    try {
+      stmt = mysqlConn.getStmt(conn);
       rs=stmt.executeQuery("SELECT * FROM credential");
       while(rs.next()) {
         System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3));  
       }
-      conn.close();
+    } catch(Exception err){
+      System.out.println(err);
+    }
+  }
+
+  public void addCred(MysqlConn mysqlConn, Connection conn){
+    Statement stmt = null;
+    PreparedStatement preparedStmt = null;
+
+    try {
+      // create a sql date object so we can use it in our INSERT statement
+      Calendar calendar = Calendar.getInstance();
+      java.sql.Date currDate = new java.sql.Date(calendar.getTime().getTime());
+
+      // the mysql insert statement
+      String sql = "INSERT INTO credential VALUES (?, ?, ?)";
+
+      // create the mysql insert preparedstatement
+      preparedStmt = conn.prepareStatement(sql);
+      preparedStmt.setInt(1, 1003);
+      preparedStmt.setString(2, "ABCDEFGH");
+      preparedStmt.setDate(3, currDate);
+
+      // execute the preparedstatement
+      preparedStmt.executeUpdate();
+    } catch(Exception err){
+      System.out.println(err);
+    }
+  }
+
+  public void delCred(MysqlConn mysqlConn, Connection conn){
+    Statement stmt = null;
+    PreparedStatement preparedStmt = null;
+
+    try {
+      // create the mysql delete statement.
+      String sql = "DELETE FROM credential WHERE EmpId = ?";
+
+      // create the mysql insert preparedstatement
+      preparedStmt = conn.prepareStatement(sql);
+      preparedStmt.setInt(1, 1003);
+
+      // execute the preparedstatement
+      preparedStmt.executeUpdate();
+    } catch(Exception err){
+      System.out.println(err);
+    }
+  }
+
+  public void emptyCred(MysqlConn mysqlConn, Connection conn){
+    Statement stmt = null;
+    PreparedStatement preparedStmt = null;
+
+    try {
+      // create the mysql delete statement.
+      String sql = "TRUNCATE credential";
+
+      // create the mysql insert preparedstatement
+      preparedStmt = conn.prepareStatement(sql);
+
+      // execute the preparedstatement
+      preparedStmt.executeUpdate();
     } catch(Exception err){
       System.out.println(err);
     }
