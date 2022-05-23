@@ -1,13 +1,15 @@
+package jdbcmysql; 
+
 import java.sql.*;
 import java.util.Calendar;
 
-class MysqlConn{
+class JdbcMySql{
 
   public static void main(String args[]){
     Connection conn=null;
 
     try {
-      MysqlConn mysqlConn = new MysqlConn();
+      JdbcMySql mysqlConn = new JdbcMySql();
       conn = mysqlConn.getConn();
       
       mysqlConn.getCreds(mysqlConn, conn);
@@ -72,7 +74,7 @@ class MysqlConn{
     return stmt;
   }
 
-  public void getCreds(MysqlConn mysqlConn, Connection conn){
+  public void getCreds(JdbcMySql mysqlConn, Connection conn){
     Statement stmt = null;
     ResultSet rs=null;
 
@@ -87,7 +89,7 @@ class MysqlConn{
     }
   }
 
-  public void addCred(MysqlConn mysqlConn, Connection conn){
+  public void addCred(JdbcMySql mysqlConn, Connection conn){
     Statement stmt = null;
     PreparedStatement preparedStmt = null;
 
@@ -112,7 +114,7 @@ class MysqlConn{
     }
   }
 
-  public void delCred(MysqlConn mysqlConn, Connection conn){
+  public void delCred(JdbcMySql mysqlConn, Connection conn){
     Statement stmt = null;
     PreparedStatement preparedStmt = null;
 
@@ -131,7 +133,7 @@ class MysqlConn{
     }
   }
 
-  public void emptyCred(MysqlConn mysqlConn, Connection conn){
+  public void emptyCred(JdbcMySql mysqlConn, Connection conn){
     Statement stmt = null;
     PreparedStatement preparedStmt = null;
 
