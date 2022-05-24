@@ -6,11 +6,19 @@
 - Future plan is to integrate Spring
 - Design should be based on MVC
 
-```
-javac -d src/main/classes/ src/main/java/jdbcMySql.java
-java -cp .:mysql-connector-java-8.0.29.jar src.main.classes.jdbcmysql.JdbcMySql
+## Commands
+---
+```bash
+javac -d . src/main/java/*.java
+java -cp .:lib/* src.main.classes.JdbcMySql
 ```
 
+## Resource
+---
+- [Understanding Java projects structures and how it all works](https://manparvesh.com/post/2017-08-15-understand-java-project-structure/)
+
+## Potential Repo Structures
+---
 ```
 bin (Binaries)
 doc (Documents)

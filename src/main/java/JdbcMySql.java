@@ -1,4 +1,4 @@
-package jdbcmysql; 
+package src.main.classes;
 
 import java.sql.*;
 import java.util.Calendar;
