@@ -2,6 +2,9 @@ package src.main.classes;
 
 import java.sql.*;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 class JdbcMySql{
 
@@ -14,10 +17,27 @@ class JdbcMySql{
       
       mysqlConn.getCreds(mysqlConn, conn);
       
-      mysqlConn.addCred(mysqlConn, conn);
-      mysqlConn.getCreds(mysqlConn, conn);
+      // create a sql date object so we can use it in our INSERT statement
+      Calendar calendar = Calendar.getInstance();
+      java.sql.Date currDate = new java.sql.Date(calendar.getTime().getTime());
+      Credential cred = null;
 
-      mysqlConn.delCred(mysqlConn, conn);
+      Map<Integer,Credential> credMap=new HashMap<Integer, Credential>();
+      //adding values to map
+      cred = new Credential(1001, "ABCDEFGA", currDate);
+      credMap.put(cred.getEmpId(), cred);
+      cred = new Credential(1002, "ABCDEFGB", currDate);
+      credMap.put(cred.getEmpId(), cred);
+      cred = new Credential(1003, "ABCDEFGC", currDate);
+      credMap.put(cred.getEmpId(), cred);
+
+      //retrieving values from map
+      Set<Integer> empIdSet= credMap.keySet();
+      for(int i:empIdSet){
+        mysqlConn.addCred(mysqlConn, conn, credMap.get(i));
+      }
+
+      mysqlConn.delCred(mysqlConn, conn, credMap.get(1002));
       mysqlConn.getCreds(mysqlConn, conn);
 
       mysqlConn.emptyCred(mysqlConn, conn);
@@ -89,23 +109,19 @@ class JdbcMySql{
     }
   }
 
-  public void addCred(JdbcMySql mysqlConn, Connection conn){
+  public void addCred(JdbcMySql mysqlConn, Connection conn, Credential cred){
     Statement stmt = null;
     PreparedStatement preparedStmt = null;
 
     try {
-      // create a sql date object so we can use it in our INSERT statement
-      Calendar calendar = Calendar.getInstance();
-      java.sql.Date currDate = new java.sql.Date(calendar.getTime().getTime());
-
       // the mysql insert statement
       String sql = "INSERT INTO credential VALUES (?, ?, ?)";
 
       // create the mysql insert preparedstatement
       preparedStmt = conn.prepareStatement(sql);
-      preparedStmt.setInt(1, 1003);
-      preparedStmt.setString(2, "ABCDEFGH");
-      preparedStmt.setDate(3, currDate);
+      preparedStmt.setInt(1, cred.getEmpId());
+      preparedStmt.setString(2, cred.getPwdHash());
+      preparedStmt.setDate(3, cred.getExpDate());
 
       // execute the preparedstatement
       preparedStmt.executeUpdate();
@@ -114,7 +130,7 @@ class JdbcMySql{
     }
   }
 
-  public void delCred(JdbcMySql mysqlConn, Connection conn){
+  public void delCred(JdbcMySql mysqlConn, Connection conn, Credential cred){
     Statement stmt = null;
     PreparedStatement preparedStmt = null;
 
@@ -124,7 +140,7 @@ class JdbcMySql{
 
       // create the mysql insert preparedstatement
       preparedStmt = conn.prepareStatement(sql);
-      preparedStmt.setInt(1, 1003);
+      preparedStmt.setInt(1, cred.getEmpId());
 
       // execute the preparedstatement
       preparedStmt.executeUpdate();
@@ -150,5 +166,31 @@ class JdbcMySql{
       System.out.println(err);
     }
   }
+
+}
+
+class Credential {
+    private int empId;
+    private String pwdHash;
+    private Date expDate;
+
+    public Credential(int empId,String pwdHash, Date expDate){
+      this.empId = empId;
+      this.pwdHash = pwdHash;
+      this.expDate = expDate;
+    }
+    public int getEmpId() {
+      return empId;
+    }
+    public String getPwdHash() {
+      return pwdHash;
+    }
+    public Date getExpDate() {
+      return expDate;
+    }
+    @Override
+    public String toString() {
+      return "Credential [EmpId : " + empId + ", PwdHash  : " + pwdHash + ", ExpDate : " + expDate + "]";
+    }
 
 }
