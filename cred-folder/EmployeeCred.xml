@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<employees>
+  <employee id="1001">
+      <EmpId>1001</EmpId>
+      <PwdHash>ABCDEFGA</PwdHash>
+      <ExpDate>2022/05/26</ExpDate>
+  </employee>
+  <employee id="1002">
+      <EmpId>1002</EmpId>
+      <PwdHash>ABCDEFGC</PwdHash>
+      <ExpDate>2022/05/28</ExpDate>
+  </employee>
+  <employee id="1003">
+      <EmpId>1003</EmpId>
+      <PwdHash>ABCDEFGB</PwdHash>
+      <ExpDate>2022/05/27</ExpDate>
+  </employee>
+</employees>
