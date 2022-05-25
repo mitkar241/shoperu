@@ -16,6 +16,7 @@ java -cp .:lib/* src.main.classes.JdbcMySql
 ## Resource
 ---
 - [Understanding Java projects structures and how it all works](https://manparvesh.com/post/2017-08-15-understand-java-project-structure/)
+- [Java Read XML – Java DOM Parser Example](https://howtodoinjava.com/java/xml/read-xml-dom-parser-example/)
 
 ## Potential Repo Structures
 ---
